@@ -1,0 +1,18 @@
+# ============================================
+# Dépendances communes (dev + prod)
+# ============================================
+
+# Framework web
+Django==5.0.6
+
+# Driver MySQL
+mysqlclient==2.2.4
+
+# Gestion des variables d'environnement (12-factor app)
+django-environ==0.11.2
+
+# Serveur WSGI de production
+gunicorn==22.0.0
+
+# Fichiers statiques en production
+whitenoise==6.6.0

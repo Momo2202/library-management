@@ -1,0 +1,28 @@
+# ============================================
+# Dépendances de développement
+# ============================================
+
+-r base.txt
+
+# Tests
+pytest==8.2.0
+pytest-django==4.8.0
+pytest-cov==5.0.0
+factory-boy==3.3.0
+faker==25.2.0
+
+# Qualité de code
+ruff==0.4.4
+black==24.4.2
+mypy==1.10.0
+django-stubs==5.0.0
+
+# Pre-commit (hooks Git)
+pre-commit==3.7.1
+
+# Sécurité
+pip-audit==2.7.2
+bandit==1.7.8
+
+# Debug
+django-debug-toolbar==4.4.2

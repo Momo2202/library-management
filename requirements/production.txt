@@ -1,0 +1,8 @@
+# ============================================
+# Dépendances de production
+# ============================================
+
+-r base.txt
+
+# Observabilité
+django-prometheus==2.3.1
