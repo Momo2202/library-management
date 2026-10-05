@@ -1,0 +1,199 @@
+# ============================================
+# pyproject.toml — Configuration centrale du projet
+# ============================================
+# Ce fichier remplace setup.py, setup.cfg, ruff.toml, mypy.ini
+# C'est le standard PEP 518 / PEP 621 en 2026.
+# ============================================
+
+[project]
+name = "library-management"
+version = "0.1.0"
+description = "Application web de gestion de bibliothèque"
+requires-python = ">=3.12"
+authors = [
+    { name = "Ton Nom", email = "ton.email@example.com" },
+]
+
+# ============================================
+# RUFF — Linter & Formateur ultra-rapide
+# ============================================
+# Ruff remplace Flake8, isort, pyupgrade, autoflake, etc.
+# Doc : https://docs.astral.sh/ruff/
+
+[tool.ruff]
+# Version Python cible
+target-version = "py312"
+# Longueur de ligne (standard communauté Python)
+line-length = 100
+# Exclure ces dossiers du lint
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "migrations",
+    "staticfiles",
+    "media",
+    "htmlcov",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+]
+
+[tool.ruff.lint]
+# Règles activées (par code)
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort (tri des imports)
+    "B",    # flake8-bugbear (bugs potentiels)
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade (modernisation du code)
+    "DJ",   # flake8-django
+    "S",    # flake8-bandit (sécurité)
+    "T20",  # flake8-print (interdit les print())
+    "SIM",  # flake8-simplify
+    "RUF",  # règles Ruff spécifiques
+]
+# Règles ignorées
+ignore = [
+    "E501",    # Line too long (géré par Black/Ruff format)
+    "S101",    # assert autorisé dans les tests
+    "DJ001",   # null=True sur CharField (parfois nécessaire)
+]
+
+# Règles par fichier
+[tool.ruff.lint.per-file-ignores]
+# Tests : on autorise plus de choses
+"**/tests/**/*.py" = [
+    "S101",   # assert
+    "S105",   # hardcoded password (faux positifs)
+    "S106",   # hardcoded password funcarg
+    "PLR2004",# magic values
+]
+# Settings Django : imports wildcard autorisés
+"config/settings/*.py" = ["F403", "F405"]
+# Migrations : pas de contrôle qualité
+"**/migrations/*.py" = ["ALL"]
+
+[tool.ruff.lint.isort]
+# Configuration du tri des imports
+known-first-party = ["apps", "config"]
+combine-as-imports = true
+force-sort-within-sections = true
+
+# ============================================
+# BLACK — Formateur de référence
+# ============================================
+# (Ruff format le remplace maintenant, mais on garde Black
+#  pour compatibilité avec les outils existants)
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | __pycache__
+  | migrations
+  | staticfiles
+  | media
+)/
+'''
+
+# ============================================
+# MYPY — Vérification statique des types
+# ============================================
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+show_error_codes = true
+show_error_context = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+plugins = ["mypy_django_plugin.main"]
+
+explicit_package_bases=true
+mypy_path="."
+namespace_packages=true
+
+# Fichiers exclus
+exclude = [
+    "migrations/",
+    "staticfiles/",
+    "media/",
+    "config/settings/",
+]
+
+# Configuration par module
+[[tool.mypy.overrides]]
+module = ["*.migrations.*"]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["*.tests.*"]
+disallow_untyped_defs = false
+warn_unused_ignores = false
+
+# Les settings utilisent des imports wildcard, on les ignore
+[[tool.mypy.overrides]]
+module = ["config.settings.*"]
+ignore_errors = true
+ignore_missing_imports = true
+
+# ============================================
+# PYTEST — Configuration
+# ============================================
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+python_classes = ["*Test"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--strict-markers",
+    "--tb=short",
+]
+testpaths = ["apps"]
+
+# ============================================
+# COVERAGE — Couverture de code
+# ============================================
+
+[tool.coverage.run]
+source = ["apps", "config"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/__init__.py",
+    "manage.py",
+    "config/wsgi.py",
+    "config/asgi.py",
+]
+
+[tool.coverage.report]
+# Seuil minimum de couverture
+fail_under = 85
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+# ============================================
+# DJANGO STUBS — Pour Mypy
+# ============================================
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"

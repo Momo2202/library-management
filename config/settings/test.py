@@ -13,7 +13,7 @@ Note : La compatibilité MySQL est validée dans la CI/CD
 via une pipeline dédiée.
 """
 
-from .development import *  # noqa: F403
+from .development import *
 
 # ============================================
 # BASE DE DONNÉES DE TEST
@@ -39,4 +39,4 @@ PASSWORD_HASHERS = [
 ]
 
 # Désactive le logging pendant les tests (moins de bruit)
-LOGGING["root"]["level"] = "CRITICAL"  # noqa: F405
+LOGGING["root"]["level"] = "CRITICAL"
