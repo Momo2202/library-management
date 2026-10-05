@@ -66,7 +66,7 @@ THIRD_PARTY_APPS = [
 # Applications locales (notre code)
 # Note : chaque app sera ajoutée ici au fur et à mesure
 LOCAL_APPS = [
-    # "apps.core",
+    "apps.core",
     # "apps.authors",
     # "apps.books",
     # "apps.members",
