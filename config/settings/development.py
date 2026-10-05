@@ -4,7 +4,7 @@ Configuration Django pour l'environnement de développement.
 Activée uniquement en local sur la machine du développeur.
 """
 
-from .base import *  # noqa: F403
+from .base import *
 
 # ============================================
 # MODE DEBUG
@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ["*"]
 
 # Surcharge pour le développement (sera lue depuis .env)
 DATABASES = {
-    "default": env.db("DATABASE_URL"),  # noqa: F405
+    "default": env.db("DATABASE_URL"),
 }
 DATABASES["default"]["ENGINE"] = "django.db.backends.mysql"
 
@@ -29,7 +29,7 @@ DATABASES["default"]["ENGINE"] = "django.db.backends.mysql"
 # APPS DE DÉVELOPPEMENT
 # ============================================
 
-INSTALLED_APPS += [  # noqa: F405
+INSTALLED_APPS += [
     "django.contrib.admindocs",
 ]
 

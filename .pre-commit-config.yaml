@@ -1,0 +1,87 @@
+# ============================================
+# .pre-commit-config.yaml
+# ============================================
+# Ce fichier configure les "hooks" Git qui s'exécutent
+# automatiquement AVANT chaque commit.
+#
+# Résultat : impossible de commiter du code mal formaté,
+# non typé, ou avec des problèmes de sécurité.
+#
+# Installation : pre-commit install
+# Exécution manuelle : pre-commit run --all-files
+# ============================================
+
+repos:
+  # ============================================
+  # Hooks généraux (fichiers, YAML, etc.)
+  # ============================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace        # Supprime les espaces en fin de ligne
+      - id: end-of-file-fixer         # Ajoute un \n en fin de fichier
+      - id: check-yaml                # Valide la syntaxe YAML
+      - id: check-toml                # Valide la syntaxe TOML
+      - id: check-json                # Valide la syntaxe JSON
+      - id: check-added-large-files   # Bloque les gros fichiers (> 500 Ko)
+        args: ["--maxkb=500"]
+      - id: check-merge-conflict      # Détecte les conflits Git non résolus
+      - id: check-case-conflict       # Détecte les conflits de casse (Windows/Linux)
+      - id: mixed-line-ending         # Uniformise les fins de ligne (LF)
+        args: ["--fix=lf"]
+
+  # ============================================
+  # Ruff — Linter + Formateur Python
+  # ============================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff                      # Lint + correction auto
+        args: ["--fix", "--exit-non-zero-on-fix"]
+      - id: ruff-format               # Formatage (remplace Black)
+
+    # ============================================
+  # Mypy — Vérification des types
+  # ============================================
+  # On utilise le Mypy de notre venv (pas celui de pre-commit)
+  # car il a besoin d'accéder aux dépendances Django du projet
+  # (django-environ, django-stubs, etc.)
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        types: [python]
+        args:
+          - "--config-file=pyproject.toml"
+          - "--explicit-package-bases"
+          - "apps"
+        exclude: ^(migrations/|.*/migrations/|config/settings/)
+        pass_filenames: false
+
+  # ============================================
+  # Django — Vérifications spécifiques
+  # ============================================
+  - repo: local
+    hooks:
+      - id: django-check
+        name: Django system check
+        entry: python manage.py check
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: django-makemigrations-check
+        name: Vérifie qu'aucune migration n'est manquante
+        entry: python manage.py makemigrations --check --dry-run
+        language: system
+        pass_filenames: false
+        always_run: true
+
+# ============================================
+# Configuration globale
+# ============================================
+
+# Ne pas exécuter sur les hooks de merge/commit automatisés
+default_install_hook_types: [pre-commit, pre-push]

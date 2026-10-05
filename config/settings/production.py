@@ -4,7 +4,7 @@ Configuration Django pour l'environnement de production.
 Sécurité maximale, aucun debug, sources externes uniquement.
 """
 
-from .base import *  # noqa: F403
+from .base import *
 
 # ============================================
 # MODE DEBUG (JAMAIS en prod !)
@@ -36,11 +36,11 @@ X_FRAME_OPTIONS = "DENY"
 # ============================================
 
 # WhiteNoise sert les fichiers statiques directement par Django en prod
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")  # noqa: F405
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ============================================
 # LOGGING PRODUCTION
 # ============================================
 
-LOGGING["handlers"]["console"]["level"] = "WARNING"  # noqa: F405
+LOGGING["handlers"]["console"]["level"] = "WARNING"

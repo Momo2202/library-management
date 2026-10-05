@@ -142,8 +142,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # INTERNATIONALISATION
 # ============================================
 
-LANGUAGE_CODE = "fr-fr"    # Interface en français
-TIME_ZONE = "Europe/Paris" # Fuseau horaire français
+LANGUAGE_CODE = "fr-fr"  # Interface en français
+TIME_ZONE = "Europe/Paris"  # Fuseau horaire français
 USE_I18N = True
 USE_TZ = True
 
